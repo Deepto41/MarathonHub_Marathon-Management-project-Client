@@ -1,8 +1,13 @@
 import React from "react";
 import { Link } from "react-router";
 import './Login.css'
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import app from "../../Firebase/Firebase.init";
+  
 
 const Login = () => {
+
+  
   const handelLogin = (e) => {
     e.preventDefault();
 
@@ -10,6 +15,20 @@ const Login = () => {
     const password = e.target.password.value;
     console.log(email, password);
   };
+ const handleGoogle = () => {
+   const provider = new GoogleAuthProvider();
+  const auth = getAuth(app);
+
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        result.user;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+      
+  };
+  
 
   return (
     <div className="mx-auto max-w-sm mt-8 mb-6">
@@ -64,7 +83,7 @@ const Login = () => {
       </small>
 
       <div className="flex gap-3 mt-2 justify-center items-center">
-        <button className="btn bg-white text-black border-[#e5e5e5]">
+        <button onClick={handleGoogle} className="btn bg-white w-full text-black border-[#e5e5e5]">
           <svg
             aria-label="Google logo"
             width="16"
