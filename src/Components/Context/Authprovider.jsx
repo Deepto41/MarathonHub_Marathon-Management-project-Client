@@ -47,6 +47,7 @@ useEffect(()=>{
     setUser,
     user,
     logOut,
+    setLoading,
     
     loading,
 }

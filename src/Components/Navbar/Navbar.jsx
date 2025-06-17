@@ -1,12 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { CiLight } from 'react-icons/ci';
-import { MdDarkMode } from 'react-icons/md';
-import { NavLink } from 'react-router';
-import './Navbar.css'
+import React, { use, useEffect, useState } from "react";
+import { CiLight } from "react-icons/ci";
+import { MdDarkMode } from "react-icons/md";
+import { Link, NavLink } from "react-router";
+import "./Navbar.css";
+import { Authcontext } from "../Context/Authcontext";
+import Swal from "sweetalert2";
 
 const Navbar = () => {
-     const [theme, setTheme] = useState("light");
-     useEffect(() => {
+  const { user, logOut } = use(Authcontext);
+
+  const [theme, setTheme] = useState("light");
+  useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
 
@@ -14,7 +18,23 @@ const Navbar = () => {
     setTheme((p) => (p === "light" ? "dark" : "light"));
   };
 
- const links = (
+  const handleLogout = () => {
+    logOut()
+      .then(() => {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Logged out successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const links = (
     <>
       <li className="font-medium text-md mr-2">
         <NavLink to="/">Home</NavLink>
@@ -23,18 +43,22 @@ const Navbar = () => {
         <NavLink to="/marathons">Marathons</NavLink>
       </li>
       <li className="font-medium text-md  mr-2">
-        <NavLink to="/login">Login</NavLink>
+        <NavLink to="/addmarathon">Add Marathons</NavLink>
       </li>
-      <li className="font-medium text-md  mr-2">
-        <NavLink to="/regester">Regester</NavLink>
-      </li>
+
+      {user && (
+        <li className="font-medium text-md  mr-2">
+          <NavLink to="/dashboard">Dashboard</NavLink>
+        </li>
+      )}
+
     </>
   );
 
-    return (
-       <div>
-      <div className="navbar bg-base-100 shadow-sm w-11/12 mx-auto ">
-        <div className="navbar-start">
+  return (
+    <div>
+      <div className="navbar bg-base-400 shadow-sm w-11/12 mx-auto ">
+        <div className="navbar-start flex items-center gap-2">
           <div className="dropdown">
             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
               <svg
@@ -60,20 +84,20 @@ const Navbar = () => {
               {links}
             </ul>
           </div>
-          <a className="btn btn-ghost text-2xl font-bold">
+          <a className="btn btn-ghost lg:text-2xl md:text-2xl text-md  font-bold">
             <span className="text-[#020079]">Marathon</span>
             <span className="text-[#020079]">Hub</span>
             <img
-              className="w-10  rounded-none"
+              className="lg:w-10 md:w-10 w-8 rounded-none"
               src="/logo/marathon_fav-removebg-preview.png"
               alt=""
             />
           </a>
         </div>
-        <div className="navbar-center hidden lg:flex">
+        <div className="navbar-center hidden  lg:flex">
           <ul className="menu menu-horizontal px-1">{links}</ul>
         </div>
-        <div className="navbar-end">
+        <div className="navbar-end ">
           <div>
             <button onClick={changeTheme} className=" mr-3">
               {theme === "light" ? (
@@ -84,32 +108,42 @@ const Navbar = () => {
             </button>
           </div>
 
-          {/* {user && (
+          {user && (
             <div className="avatar ">
               <div className="ring-primary ring-offset-base-100 w-10 rounded-full ring-2 ring-offset-1 mr-3">
                 <img src={user.photoURL} />
               </div>
             </div>
-          )} */}
-          {/* {user ? (
+          )}
+
+          {user ? (
             <button
-              className="btn text-white rounded-xl px-4 py-1 bg-[#8DC63F]"
+              className="btn text-white rounded-xl px-4 py-1 bg-[#020079]"
               onClick={handleLogout}
             >
               Logout
             </button>
           ) : (
-            <Link
-              to="/login"
-              className="btn text-white rounded-xl px-4 py-1 bg-[#8DC63F]"
-            >
-              Login
-            </Link>
-          )} */}
+            <div className="flex gap-2">
+              <Link
+                to="/regester"
+                className="btn text-white rounded-xl px-4 py-1 bg-[#020079]"
+              >
+                Regester
+              </Link>
+
+              <Link
+                to="/login"
+                className="btn text-white rounded-xl px-4 py-1 bg-[#020079]"
+              >
+                Login
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </div>
-    );
+  );
 };
 
 export default Navbar;

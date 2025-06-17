@@ -8,6 +8,9 @@ import Home from "../Components/Home/Home";
 import Login from "../Components/Shared/Login/Login";
 import Regester from "../Components/Shared/Regestrer/Regester";
 import Marathons from "../Marathons/Marathons";
+import Dashboard from "../Components/Dashboard/Dashboard";
+import Addmarathon from "../Components/AddMarathon/Addmarathon";
+import Privateroute from "./Privateroute";
 
 
  export const router = createBrowserRouter([
@@ -20,6 +23,8 @@ import Marathons from "../Marathons/Marathons";
       {path:'login', Component:Login},
       {path:'regester', Component:Regester},
       {path:'marathons' , Component:Marathons},
+      {path:'dashboard',Component:Dashboard},
+      {path:'addmarathon', element:<Privateroute><Addmarathon></Addmarathon></Privateroute>}
     ]
     
     }

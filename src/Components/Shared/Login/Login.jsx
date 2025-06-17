@@ -1,34 +1,77 @@
-import React from "react";
-import { Link } from "react-router";
-import './Login.css'
+import React, { use } from "react";
+import { Link, useNavigate } from "react-router";
+import "./Login.css";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import app from "../../Firebase/Firebase.init";
-  
+import Swal from "sweetalert2";
+import { Authcontext } from "../../Context/Authcontext";
 
 const Login = () => {
+  const { createNewUser } = use(Authcontext);
+  const navigate = useNavigate();
 
-  
   const handelLogin = (e) => {
     e.preventDefault();
 
     const email = e.target.email.value;
     const password = e.target.password.value;
     console.log(email, password);
+
+    createNewUser(email, password)
+      .then((result) => {
+        console.log(result);
+        if (result.user) {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Logged in Successfully",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          e.target.reset();
+          navigate("/");
+        }
+      })
+      .catch((error) => {
+        if (error) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+            footer: '<a href="#">Why do I have this issue?</a>',
+          });
+        }
+      });
   };
- const handleGoogle = () => {
-   const provider = new GoogleAuthProvider();
-  const auth = getAuth(app);
+
+  const handleGoogle = () => {
+    const provider = new GoogleAuthProvider();
+    const auth = getAuth(app);
 
     signInWithPopup(auth, provider)
       .then((result) => {
-        result.user;
+        if (result.user) {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Logged in Successfully",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+
+          navigate("/");
+        }
       })
       .catch((error) => {
         console.log(error);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<a href="#">Why do I have this issue?</a>',
+        });
       });
-      
   };
-  
 
   return (
     <div className="mx-auto max-w-sm mt-8 mb-6">
@@ -83,7 +126,10 @@ const Login = () => {
       </small>
 
       <div className="flex gap-3 mt-2 justify-center items-center">
-        <button onClick={handleGoogle} className="btn bg-white w-full text-black border-[#e5e5e5]">
+        <button
+          onClick={handleGoogle}
+          className="btn bg-white w-full text-black border-[#e5e5e5]"
+        >
           <svg
             aria-label="Google logo"
             width="16"
@@ -113,8 +159,6 @@ const Login = () => {
           </svg>
           Login with Google
         </button>
-
-      
       </div>
     </div>
   );

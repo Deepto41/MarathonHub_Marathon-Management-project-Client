@@ -13,14 +13,16 @@ import {
 import app from "../../Firebase/Firebase.init";
 
 const Regester = () => {
-  const { createNewUser, setUser, logOut } = use(Authcontext);
+  const { createNewUser, setUser, logOut} = use(Authcontext);
   const [showpass, setShowpass] = useState(false);
   const navigate = useNavigate();
   const provider = new GoogleAuthProvider();
   const auth = getAuth(app);
 
+
   const handleCreateuser = (e) => {
     e.preventDefault();
+
     const name = e.target.name.value;
     const email = e.target.email.value;
     const photo = e.target.photoUrl.value;
@@ -58,6 +60,7 @@ const Regester = () => {
                 footer: '<a href="#">Why do I have this issue?</a>',
               });
             }
+           
           });
       })
       .catch((error) => {
@@ -75,10 +78,28 @@ const Regester = () => {
   const handleGoogle = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
-        result.user;
+       if (result.user) {
+                 Swal.fire({
+                   position: "center",
+                   icon: "success",
+                   title: "Logged in Successfully",
+                   showConfirmButton: false,
+                   timer: 1500,
+                 });
+       
+                 navigate("/");
+               }
       })
       .catch((error) => {
         console.log(error);
+        if (error) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+            footer: '<a href="#">Why do I have this issue?</a>',
+          });
+        }
       });
       
   };
