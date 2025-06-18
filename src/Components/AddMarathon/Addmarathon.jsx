@@ -6,8 +6,9 @@ import Swal from "sweetalert2";
 
 const Addmarathon = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [imagePreview, setImagePreview] = useState(null);
-  const { user } = use(Authcontext);
+  
+
+  const { user, setLoading, loading } = use(Authcontext);
   const handleaddmarathon = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -15,6 +16,7 @@ const Addmarathon = () => {
 
     const newData = Object.fromEntries(formdata.entries());
     console.log(newData, user.email);
+    setLoading(true);
 
     const dataSendToDb = {
       ...newData,
@@ -50,10 +52,14 @@ const Addmarathon = () => {
 
         form.reset();
       });
+      setLoading(false);
   };
 
   return (
     <div className="mx-auto max-w-lg mt-8 mb-8 px-4">
+
+      {loading && (<span className="loading loading-bars loading-xl"></span>)}
+
       <form onSubmit={handleaddmarathon}>
         <div className="bg-base-200 border border-base-300 rounded-xl p-6 space-y-4">
           <h2 className="text-3xl font-bold text-center">Add Marathons!</h2>
@@ -155,7 +161,6 @@ const Addmarathon = () => {
               name="Image"
               className="input w-full"
               placeholder="photo"
-           
             />
           </div>
 

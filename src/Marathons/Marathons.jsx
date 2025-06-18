@@ -1,10 +1,10 @@
-import React from 'react';
-import { Link, useLoaderData } from 'react-router';
+import React  from 'react';
+import { Link, useLoaderData, useNavigate } from 'react-router';
 
 const Marathons = () => {
-
+const navigate=useNavigate()
     const data = useLoaderData()
-    console.log(data)
+ 
     return (
         <div className='mx-auto w-11/12'>
            <h2 className="text-2xl font-black mt-7 text-center  mb-8">
@@ -29,12 +29,8 @@ const Marathons = () => {
                   <p>📅Regestration start Date:{d.start_date}</p>
                   <p>📅Regestration End Date:{d.End_date}</p>
                   <p> 📍 Location: {d.location} </p>
-                  <Link
-                    to="/details"
-                    className="btn text-white rounded-xl px-4 py-1 bg-[#020079]"
-                  >
-                    See Details
-                  </Link>
+                  <button onClick={()=>navigate(`/details/${d._id}`)} className="btn text-white rounded-xl px-4 py-1 bg-[#020079]">See Details</button>
+                 
                 </div>
               </div>
             </div>
