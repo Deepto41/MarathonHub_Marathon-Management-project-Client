@@ -17,14 +17,18 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        loader: () =>
-          fetch("http://localhost:3000/marathonlimit"),
+        loader: () => fetch("http://localhost:3000/marathonlimit"),
         Component: Home,
       },
 
       { path: "login", Component: Login },
       { path: "regester", Component: Regester },
-      { path: "marathons", Component: Marathons },
+      {
+        path: "marathons",
+        loader: () => fetch("http://localhost:3000/allmarathon"),
+        Component: Marathons,
+      },
+
       { path: "dashboard", Component: Dashboard },
       {
         path: "addmarathon",
