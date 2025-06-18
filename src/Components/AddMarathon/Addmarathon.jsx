@@ -1,18 +1,55 @@
 import React, { use, useState } from "react";
 import { Authcontext } from "../Context/Authcontext";
 import DatePicker from "react-datepicker";
-import 'react-datepicker/dist/react-datepicker.css';
+import "react-datepicker/dist/react-datepicker.css";
+import Swal from "sweetalert2";
 
 const Addmarathon = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [imagePreview, setImagePreview] = useState(null);
   const { user } = use(Authcontext);
   const handleaddmarathon = (e) => {
     e.preventDefault();
-     const form =e.target;
+    const form = e.target;
     const formdata = new FormData(form);
 
     const newData = Object.fromEntries(formdata.entries());
-    console.log(newData,user.email)
+    console.log(newData, user.email);
+
+    const dataSendToDb = {
+      ...newData,
+      name: user?.displayName,
+      email: user?.email,
+    };
+    console.log(dataSendToDb);
+
+    fetch("http://localhost:3000/marathons", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(dataSendToDb),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("data after send to db", data);
+        if (data.insertedId) {
+          Swal.fire({
+            title: "Successfully Added!",
+            icon: "success",
+            draggable: true,
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+            footer: '<a href="#">Why do I have this issue?</a>',
+          });
+        }
+
+        form.reset();
+      });
   };
 
   return (
@@ -33,25 +70,29 @@ const Addmarathon = () => {
           </div>
 
           <div>
-            <label className="label flex flex-row ">Start Regestration Date</label>
-            <DatePicker 
-              selected={selectedDate}
-              onChange={(date) => setSelectedDate(date)}
-              dateFormat="dd/MM/yyyy"
-              type="date"
-              name="start date"
-              className="input lg:w-108 md:w-108 w-60  "
-            />
-          </div>
-
-          <div>
-            <label className="label flex flex-row ">End Regestration Date</label>
+            <label className="label flex flex-row ">
+              Start Regestration Date
+            </label>
             <DatePicker
               selected={selectedDate}
               onChange={(date) => setSelectedDate(date)}
               dateFormat="dd/MM/yyyy"
               type="date"
-              name="End date"
+              name="start_date"
+              className="input lg:w-108 md:w-108 w-60  "
+            />
+          </div>
+
+          <div>
+            <label className="label flex flex-row ">
+              End Regestration Date
+            </label>
+            <DatePicker
+              selected={selectedDate}
+              onChange={(date) => setSelectedDate(date)}
+              dateFormat="dd/MM/yyyy"
+              type="date"
+              name="End_date"
               className="input lg:w-108 md:w-108 w-60 "
             />
           </div>
@@ -63,7 +104,7 @@ const Addmarathon = () => {
               onChange={(date) => setSelectedDate(date)}
               dateFormat="dd/MM/yyyy"
               type="date"
-              name="Marathon Start"
+              name="Marathon_Start"
               className="input lg:w-108 md:w-108 w-60 "
             />
           </div>
@@ -98,7 +139,6 @@ const Addmarathon = () => {
           <div>
             <label className="label">Description</label>
             <textarea
-              
               name="description"
               rows="4"
               cols="50"
@@ -111,11 +151,11 @@ const Addmarathon = () => {
           <div>
             <label className="label">Marathon Image</label>
             <input
-              type="file"
-              accept="image"
+              type="url"
               name="Image"
               className="input w-full"
-              placeholder="Image URL"
+              placeholder="photo"
+           
             />
           </div>
 
@@ -124,7 +164,6 @@ const Addmarathon = () => {
             className="btn btn-neutral bg-[#020079] border-none w-full mt-4"
           >
             Add Marathon
-            
           </button>
         </div>
       </form>
