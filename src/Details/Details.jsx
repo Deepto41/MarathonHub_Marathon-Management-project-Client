@@ -1,7 +1,8 @@
 import React from "react";
-import { useLoaderData } from "react-router";
+import { useLoaderData, useNavigate } from "react-router";
 
 const Details = () => {
+  const navigate =useNavigate();
   const data = useLoaderData();
   console.log(data);
   return (
@@ -26,6 +27,7 @@ const Details = () => {
                   <p>📅Regestration start Date:{data.start_date}</p>
                   <p>📅Regestration End Date:{data.End_date}</p>
                   <p> 📍 Location: {data.location} </p>
+                 {/* <button onClick={()=>navigate(`/details/${data._id}`)} className="btn text-white rounded-xl px-4 py-1 bg-[#020079]">Regestration</button> */}
                 </div>
               </div>
             </div>

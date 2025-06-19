@@ -9,6 +9,8 @@ import Dashboard from "../Components/Dashboard/Dashboard";
 import Addmarathon from "../Components/AddMarathon/Addmarathon";
 import Privateroute from "./Privateroute";
 import Details from "../Details/Details";
+import Marathonreg from "../Components/Marathonreg/Marathonreg";
+import Mymarathonlist from "../Components/Mymarathonlist/Mymarathonlist";
 
 export const router = createBrowserRouter([
   {
@@ -34,7 +36,13 @@ export const router = createBrowserRouter([
         loader: () => fetch("http://localhost:3000/allmarathon"),
         Component: Marathons,
       },
-
+      {
+       path:"marathonreg" , 
+       loader:({params})=>fetch(`http://localhost:3000/allmarathon/${params._id}`),Component:Marathonreg
+      },
+      {
+       path:"mymarathonlist", Component:Mymarathonlist
+      },
       { path: "dashboard", Component: Dashboard },
       {
         path: "addmarathon",

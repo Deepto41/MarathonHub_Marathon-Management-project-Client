@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 import { Authcontext } from "../../Context/Authcontext";
 
 const Login = () => {
-  const { createNewUser } = use(Authcontext);
+  const {logIn} = use(Authcontext);
   const navigate = useNavigate();
 
   const handelLogin = (e) => {
@@ -17,7 +17,7 @@ const Login = () => {
     const password = e.target.password.value;
     console.log(email, password);
 
-    createNewUser(email, password)
+    logIn(email, password)
       .then((result) => {
         console.log(result);
         if (result.user) {

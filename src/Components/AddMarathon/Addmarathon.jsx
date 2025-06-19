@@ -8,7 +8,7 @@ const Addmarathon = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   
 
-  const { user, setLoading, loading } = use(Authcontext);
+  const { user} = use(Authcontext);
   const handleaddmarathon = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -16,7 +16,7 @@ const Addmarathon = () => {
 
     const newData = Object.fromEntries(formdata.entries());
     console.log(newData, user.email);
-    setLoading(true);
+
 
     const dataSendToDb = {
       ...newData,
@@ -51,14 +51,15 @@ const Addmarathon = () => {
         }
 
         form.reset();
+        
       });
-      setLoading(false);
+   
   };
 
   return (
     <div className="mx-auto max-w-lg mt-8 mb-8 px-4">
 
-      {loading && (<span className="loading loading-bars loading-xl"></span>)}
+      
 
       <form onSubmit={handleaddmarathon}>
         <div className="bg-base-200 border border-base-300 rounded-xl p-6 space-y-4">

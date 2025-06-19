@@ -13,12 +13,11 @@ import {
 import app from "../../Firebase/Firebase.init";
 
 const Regester = () => {
-  const { createNewUser, setUser, logOut} = use(Authcontext);
+  const { createNewUser, setUser, logOut } = use(Authcontext);
   const [showpass, setShowpass] = useState(false);
   const navigate = useNavigate();
   const provider = new GoogleAuthProvider();
   const auth = getAuth(app);
-
 
   const handleCreateuser = (e) => {
     e.preventDefault();
@@ -36,6 +35,7 @@ const Regester = () => {
         updateProfile(user, {
           displayName: name,
           photoURL: photo,
+          
         });
         logOut()
           .then(() => {
@@ -43,6 +43,7 @@ const Regester = () => {
               name,
               email,
             });
+            setUser(null)
             Swal.fire({
               title: "Successfully Regestered",
               icon: "success",
@@ -60,7 +61,6 @@ const Regester = () => {
                 footer: '<a href="#">Why do I have this issue?</a>',
               });
             }
-           
           });
       })
       .catch((error) => {
@@ -78,17 +78,17 @@ const Regester = () => {
   const handleGoogle = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
-       if (result.user) {
-                 Swal.fire({
-                   position: "center",
-                   icon: "success",
-                   title: "Logged in Successfully",
-                   showConfirmButton: false,
-                   timer: 1500,
-                 });
-       
-                 navigate("/");
-               }
+        if (result.user) {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Logged in Successfully",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+
+          navigate("/");
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -101,7 +101,6 @@ const Regester = () => {
           });
         }
       });
-      
   };
   return (
     <div className="mx-auto max-w-sm mt-8 mb-8">

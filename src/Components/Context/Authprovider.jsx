@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Authcontext } from './Authcontext';
 import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
 import app from '../Firebase/Firebase.init';
+import { signInWithEmailAndPassword } from 'firebase/auth/cordova';
 
 
 const Authprovider = ({children}) => {
@@ -15,6 +16,10 @@ const createNewUser=(email,password)=>{
  return createUserWithEmailAndPassword(auth,email,password)
 }
 
+const logIn=(email,password)=>{
+    return signInWithEmailAndPassword(auth , email ,password)
+}
+
 const logOut=()=>{
 return signOut(auth)
 }
@@ -25,7 +30,7 @@ return signOut(auth)
 useEffect(()=>{
     const unSubscribe=onAuthStateChanged(auth,currentUser  =>{
     console.log('current user', currentUser);
-     setLoading(false);
+    //  setLoading(false);
   
     if (currentUser) {
         setUser(currentUser,{
@@ -49,6 +54,7 @@ useEffect(()=>{
     logOut,
     setLoading,
     loading,
+    logIn
 }
 
     return <Authcontext value={authData}>{children}</Authcontext>

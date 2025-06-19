@@ -1,7 +1,8 @@
 import React from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 const Marathoncards = ({ data }) => {
+  const navigate =useNavigate();
   return (
     <div className="w-11/12 mx-auto">
       <h2 className="text-2xl font-black mt-7 text-center  mb-8">
@@ -26,12 +27,7 @@ const Marathoncards = ({ data }) => {
                   <p>📅Regestration start Date:{d.start_date}</p>
                   <p>📅Regestration End Date:{d.End_date}</p>
                   <p> 📍 Location: {d.location} </p>
-                  <Link
-                    to="/details"
-                    className="btn text-white rounded-xl px-4 py-1 bg-[#020079]"
-                  >
-                    See Details
-                  </Link>
+                    <button onClick={()=>navigate(`/details/${d._id}`)} className="btn text-white rounded-xl px-4 py-1 bg-[#020079]">See Details</button>
                 </div>
               </div>
             </div>

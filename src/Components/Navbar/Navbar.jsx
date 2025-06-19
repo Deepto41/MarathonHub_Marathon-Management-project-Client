@@ -45,6 +45,9 @@ const Navbar = () => {
       <li className="font-medium text-md  mr-2">
         <NavLink to="/addmarathon">Add Marathons</NavLink>
       </li>
+      <li className="font-medium text-md  mr-2">
+        <NavLink to="/mymarathonlist">My Marathons List</NavLink>
+      </li>
 
       {user && (
         <li className="font-medium text-md  mr-2">
