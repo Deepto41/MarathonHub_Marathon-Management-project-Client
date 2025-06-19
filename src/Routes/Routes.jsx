@@ -26,22 +26,37 @@ export const router = createBrowserRouter([
 
       { path: "login", Component: Login },
       {
-       path:'/details/:_id', 
-       loader:({params})=>fetch(`http://localhost:3000/allmarathon/${params._id}`),
-       Component:Details,
+        path: "/details/:_id",
+        loader: ({ params }) =>
+          fetch(`http://localhost:3000/allmarathon/${params._id}`),
+        Component: Details,
       },
       { path: "regester", Component: Regester },
       {
         path: "marathons",
         loader: () => fetch("http://localhost:3000/allmarathon"),
-        Component: Marathons,
+        element: (
+          <Privateroute>
+            <Marathons></Marathons>
+          </Privateroute>
+        ),
       },
       {
-       path:"marathonreg" , 
-       loader:({params})=>fetch(`http://localhost:3000/allmarathon/${params._id}`),Component:Marathonreg
+        path: "/marathonreg/:_id",
+        loader:({params})=> fetch(`http://localhost:3000/allmarathon/${params._id}`),
+        element: (
+          <Privateroute>
+            <Marathonreg></Marathonreg>
+          </Privateroute>
+        ),
       },
       {
-       path:"mymarathonlist", Component:Mymarathonlist
+        path: "mymarathonlist",
+        element: (
+          <Privateroute>
+            <Mymarathonlist></Mymarathonlist>
+          </Privateroute>
+        ),
       },
       { path: "dashboard", Component: Dashboard },
       {

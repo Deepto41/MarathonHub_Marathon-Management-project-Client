@@ -2,14 +2,21 @@ import React from "react";
 import { useLoaderData, useNavigate } from "react-router";
 
 const Details = () => {
-  const navigate =useNavigate();
+
+
+
+  const navigate = useNavigate();
   const data = useLoaderData();
   console.log(data);
+
+    const today = new Date();
+  const registrationEndDate = new Date(data.End_date);
+  const isRegistrationOpen = today <= registrationEndDate;
   return (
     <div className="w-11/12 mx-auto">
       <h2 className="text-2xl font-black mt-7 text-center  mb-8">Details</h2>
 
-     <div className="  mb-6">
+      <div className="  mb-6">
         {
           <div key={data._id} className="">
             <div className="card bg-[#578FCA] shadow-sm">
@@ -26,14 +33,30 @@ const Details = () => {
                 <div className="card-actions flex flex-col justify-center items-center font-normal mt-2">
                   <p>📅Regestration start Date:{data.start_date}</p>
                   <p>📅Regestration End Date:{data.End_date}</p>
+                  <p>📅 Marathon Start:{data.Marathon_Start}</p>
                   <p> 📍 Location: {data.location} </p>
-                 {/* <button onClick={()=>navigate(`/details/${data._id}`)} className="btn text-white rounded-xl px-4 py-1 bg-[#020079]">Regestration</button> */}
+                   <button
+                    onClick={() =>
+                      navigate(`/marathonreg/${data._id}`, {
+                        state: {
+                          title: data.title,
+                          Marathon_Start: data.Marathon_Start,
+                          email: data.email,
+                        },
+                      })
+                    }
+                    disabled={!isRegistrationOpen}
+                    className={`btn text-white rounded-xl px-4 py-1 ${
+                      isRegistrationOpen ? "bg-[#020079]" : "bg-gray-200 cursor-not-allowed"
+                    }`}
+                  >
+                    {isRegistrationOpen ? "Registration" : "Registration Closed"}
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         }
-     
       </div>
     </div>
   );
