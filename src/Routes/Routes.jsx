@@ -11,6 +11,7 @@ import Privateroute from "./Privateroute";
 import Details from "../Details/Details";
 import Marathonreg from "../Components/Marathonreg/Marathonreg";
 import Mymarathonlist from "../Components/Mymarathonlist/Mymarathonlist";
+import Myapply from "../Components/Myapply/Myapply";
 
 export const router = createBrowserRouter([
   {
@@ -49,7 +50,9 @@ export const router = createBrowserRouter([
             <Marathonreg></Marathonreg>
           </Privateroute>
         ),
+    
       },
+     
       {
         path: "mymarathonlist",
         element: (
@@ -58,7 +61,7 @@ export const router = createBrowserRouter([
           </Privateroute>
         ),
       },
-      { path: "dashboard", Component: Dashboard },
+      { path: "dashboard", element: <Privateroute><Dashboard></Dashboard></Privateroute> },
       {
         path: "addmarathon",
         element: (
