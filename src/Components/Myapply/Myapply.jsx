@@ -6,6 +6,7 @@ const Myapply = () => {
         const { user } = use(Authcontext);
         console.log(user)
       const [mypost, setMypost] = useState([]);
+       const [searchText, setSearchText] = useState("");
       const navigate =useNavigate();
        
        useEffect(() => {
@@ -15,13 +16,32 @@ const Myapply = () => {
                .then((data) => setMypost(data));
            }
          }, [user]);
+         const filteredPosts = mypost.filter((i) =>
+  i.title.toLowerCase().includes(searchText.toLowerCase())
+);
 
     return (
+     
+      
      <div className="w-11/12 mx-auto">
-      <h2 className="font-bold text-3xl mt-6 mb-8 text-center">My Marathon List</h2>
+        <div className="mb-6 text-center">
+        
+      
+    </div>
+    
+      <h2 className="font-bold text-3xl mt-6 mb-8 text-center">My Marathon Apply List</h2>
+      <div className='flex justify-center items-center'>
+        <input 
+          type="text"
+          placeholder="Search by marathon title..."
+          className="input input-bordered w-1/2 max-w-md"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+        />
+      </div>
 
-      {mypost.length === 0 ? (
-        <p className="text-2xl font-bold text-center">No Posts Available</p>
+      {filteredPosts.length === 0 ? (
+        <p className="text-2xl font-bold text-center">No Lists Available</p>
       ) : (
         <div>
           <div className="mt-8 mb-10">
@@ -39,7 +59,7 @@ const Myapply = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {mypost.map((post, index) => (
+                  {filteredPosts.map((post, index) => (
                     <tr className="bg-[#020079] text-white" key={index}>
                       <th >{index + 1}</th>
                    

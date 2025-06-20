@@ -1,8 +1,8 @@
 import React from "react";
 import { useLoaderData, useNavigate } from "react-router";
+import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 
 const Details = () => {
-
 
 
   const navigate = useNavigate();
@@ -12,6 +12,20 @@ const Details = () => {
     const today = new Date();
   const registrationEndDate = new Date(data.End_date);
   const isRegistrationOpen = today <= registrationEndDate;
+   const startDate = new Date(data.start_date);
+  const endDate = new Date(data.End_date);
+  const totalDuration = Math.floor((endDate - startDate) / 1000); // in seconds
+  const initialRemainingTime = Math.floor((endDate - today) / 1000);
+
+  const formatTime = (seconds) => {
+    const days = Math.floor(seconds / (3600 * 24));
+    const hours = Math.floor((seconds % (3600 * 24)) / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+
+    return `${days}d ${hours}h ${minutes}m ${secs}s`;
+  };
+  
   return (
     <div className="w-11/12 mx-auto">
       <h2 className="text-2xl font-black mt-7 text-center  mb-8">Details</h2>
@@ -50,8 +64,27 @@ const Details = () => {
                       isRegistrationOpen ? "bg-[#020079]" : "bg-gray-200 cursor-not-allowed"
                     }`}
                   >
-                    {isRegistrationOpen ? "Registration" : "Registration Closed"}
+                    {isRegistrationOpen ? "Registration" : "Registration"}
                   </button>
+
+                          {isRegistrationOpen && (
+                  <div className="mt-4 text-white text-lg">
+                    <CountdownCircleTimer
+                      isPlaying
+                      duration={totalDuration}
+                      initialRemainingTime={initialRemainingTime}
+                      colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
+                      colorsTime={[totalDuration, totalDuration * 0.7, totalDuration * 0.3, 0]}
+                    >
+                      {({ remainingTime }) => (
+                        <div className="text-center">
+                          <div>⏳ Ends In:</div>
+                          <div>{formatTime(remainingTime)}</div>
+                        </div>
+                      )}
+                    </CountdownCircleTimer>
+                  </div>
+                )}
                 </div>
               </div>
             </div>

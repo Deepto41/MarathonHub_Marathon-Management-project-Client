@@ -3,7 +3,7 @@ import Myapply from '../Myapply/Myapply';
 
 const Dashboard = () => {
     return (
-        <div>
+        <div className='w-11/12 mx-auto'>
             <Myapply></Myapply>
         </div>
     );
