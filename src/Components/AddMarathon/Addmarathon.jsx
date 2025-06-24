@@ -9,6 +9,7 @@ const Addmarathon = () => {
   
 
   const { user} = use(Authcontext);
+  
   const handleaddmarathon = (e) => {
     e.preventDefault();
     const form = e.target;

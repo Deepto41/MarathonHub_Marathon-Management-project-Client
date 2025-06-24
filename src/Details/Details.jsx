@@ -10,22 +10,32 @@ const Details = () => {
   console.log(data);
 
     const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
   const registrationEndDate = new Date(data.End_date);
+    registrationEndDate.setHours(0, 0, 0, 0);
+
   const isRegistrationOpen = today <= registrationEndDate;
-   const startDate = new Date(data.start_date);
-  const endDate = new Date(data.End_date);
-  const totalDuration = Math.floor((endDate - startDate) / 1000); // in seconds
-  const initialRemainingTime = Math.floor((endDate - today) / 1000);
+  //  const startDate = new Date(data.start_date);
+   const startDate = new Date(Date.parse(data.start_date));
+   
+  // const endDate = new Date(data.End_date);
+
+  const endDate = new Date(Date.parse(data.End_date));
+  // const totalDuration = Math.floor((endDate - startDate) / 1000); 
+   const totalDuration = Math.max(Math.floor((endDate - startDate) / 1000), 0);
+
+  // const initialRemainingTime = Math.floor((endDate - today) / 1000);
+ const initialRemainingTime = Math.max(Math.floor((endDate - new Date()) / 1000), 0);
 
   const formatTime = (seconds) => {
     const days = Math.floor(seconds / (3600 * 24));
     const hours = Math.floor((seconds % (3600 * 24)) / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-
     return `${days}d ${hours}h ${minutes}m ${secs}s`;
   };
-  
+
   return (
     <div className="w-11/12 mx-auto">
       <h2 className="text-2xl font-black mt-7 text-center  mb-8">Details</h2>
@@ -45,8 +55,8 @@ const Details = () => {
                 <h2 className="card-title text-lg  ">Title:{data.title}</h2>
 
                 <div className="card-actions flex flex-col justify-center items-center font-normal mt-2">
-                  <p>📅Regestration start Date:{data.start_date}</p>
-                  <p>📅Regestration End Date:{data.End_date}</p>
+                  <p>📅Regestration Start Date:{new Date(data.start_date).toLocaleDateString()}</p>
+                  <p>📅Regestration End Date:{new Date(data.End_date).toLocaleDateString()}</p>
                   <p>📅 Marathon Start:{data.Marathon_Start}</p>
                   <p> 📍 Location: {data.location} </p>
                    <button
@@ -64,17 +74,22 @@ const Details = () => {
                       isRegistrationOpen ? "bg-[#020079]" : "bg-gray-200 cursor-not-allowed"
                     }`}
                   >
-                    {isRegistrationOpen ? "Registration" : "Registration"}
+                    {isRegistrationOpen ? "Register Now"  : "Registration"}
                   </button>
 
-                          {isRegistrationOpen && (
+                           {initialRemainingTime > 0 && (
                   <div className="mt-4 text-white text-lg">
                     <CountdownCircleTimer
                       isPlaying
                       duration={totalDuration}
                       initialRemainingTime={initialRemainingTime}
                       colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
-                      colorsTime={[totalDuration, totalDuration * 0.7, totalDuration * 0.3, 0]}
+                      colorsTime={[
+                        totalDuration,
+                        totalDuration * 0.7,
+                        totalDuration * 0.3,
+                        0,
+                      ]}
                     >
                       {({ remainingTime }) => (
                         <div className="text-center">
