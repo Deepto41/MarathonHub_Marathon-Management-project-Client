@@ -1,9 +1,19 @@
-import React  from 'react';
+import React, { useEffect, useState }  from 'react';
 import {  useLoaderData, useNavigate } from 'react-router';
 
 const Marathons = () => {
 const navigate=useNavigate()
-    const data = useLoaderData()
+    const initialdata = useLoaderData()
+
+    const [sortOrder, setSortOrder] = useState("desc");
+    
+  const [marathons, setMarathons] = useState(initialdata); 
+
+useEffect(() => {
+  fetch(`http://localhost:3000/marathons?sort=${sortOrder}`)
+    .then((res) => res.json())
+    .then((data) => setMarathons(data));
+}, [sortOrder]);
  
     return (
         <div className='mx-auto w-11/12'>
@@ -11,8 +21,20 @@ const navigate=useNavigate()
         Marathon Page
       </h2>
 
+      <div className="mb-4 flex justify-end">
+        <p className='justify-center items-center font-bold text-xl mt-2 mr-2'>Sort:</p>
+  <select
+    value={sortOrder}
+    onChange={(e) => setSortOrder(e.target.value)}
+    className="select select-bordered w-fit"
+  >
+    <option value="desc">Newest </option>
+    <option value="asc">Oldest </option>
+  </select>
+</div>
+
       <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
-        {data.map((d) => (
+        {marathons.map((d) => (
           <div key={d._id} className="">
             <div className="card bg-[#578FCA] shadow-sm">
               <figure>

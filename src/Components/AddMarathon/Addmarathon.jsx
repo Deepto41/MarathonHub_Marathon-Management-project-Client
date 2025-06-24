@@ -5,11 +5,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import Swal from "sweetalert2";
 
 const Addmarathon = () => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  
+const [startDate, setStartDate] = useState(new Date());
+const [endDate, setEndDate] = useState(new Date());
+const [marathonStartDate, setMarathonStartDate] = useState(new Date());
 
-  const { user} = use(Authcontext);
-  
+  const { user } = use(Authcontext);
+
   const handleaddmarathon = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -18,11 +19,11 @@ const Addmarathon = () => {
     const newData = Object.fromEntries(formdata.entries());
     console.log(newData, user.email);
 
-
     const dataSendToDb = {
       ...newData,
       name: user?.displayName,
       email: user?.email,
+      createdAt: new Date(),
     };
     console.log(dataSendToDb);
 
@@ -52,16 +53,11 @@ const Addmarathon = () => {
         }
 
         form.reset();
-        
       });
-   
   };
 
   return (
     <div className="mx-auto max-w-lg mt-8 mb-8 px-4">
-
-      
-
       <form onSubmit={handleaddmarathon}>
         <div className="bg-base-200 border border-base-300 rounded-xl p-6 space-y-4">
           <h2 className="text-3xl font-bold text-center">Add Marathons!</h2>
@@ -82,8 +78,8 @@ const Addmarathon = () => {
               Start Regestration Date
             </label>
             <DatePicker
-              selected={selectedDate}
-              onChange={(date) => setSelectedDate(date)}
+              selected={startDate}
+              onChange={(date) => setStartDate(date)}
               dateFormat="dd/MM/yyyy"
               type="date"
               name="start_date"
@@ -96,8 +92,8 @@ const Addmarathon = () => {
               End Regestration Date
             </label>
             <DatePicker
-              selected={selectedDate}
-              onChange={(date) => setSelectedDate(date)}
+              selected={endDate}
+              onChange={(date) => setEndDate(date)}
               dateFormat="dd/MM/yyyy"
               type="date"
               name="End_date"
@@ -108,8 +104,8 @@ const Addmarathon = () => {
           <div>
             <label className="label">Marathon Start Date</label>
             <DatePicker
-              selected={selectedDate}
-              onChange={(date) => setSelectedDate(date)}
+              selected={marathonStartDate}
+              onChange={(date) => setMarathonStartDate(date)}
               dateFormat="dd/MM/yyyy"
               type="date"
               name="Marathon_Start"
