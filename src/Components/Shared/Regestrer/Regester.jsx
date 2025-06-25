@@ -104,6 +104,7 @@ const Regester = () => {
   };
   return (
     <div className="mx-auto max-w-sm mt-8 mb-8">
+          <title>Regester || MarathonHub</title>
       <form onSubmit={handleCreateuser}>
         <div className="fieldset bg-base-200 border-base-300 rounded-box w-sm border p-6">
           <h2 className="text-3xl font-bold text-center">Regester Now!</h2>

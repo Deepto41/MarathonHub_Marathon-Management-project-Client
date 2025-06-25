@@ -17,6 +17,7 @@ const Marathons = () => {
 
   return (
     <div className="mx-auto w-11/12">
+          <title>Marathon Page || MarathonHub</title>
       <h2 className="text-2xl font-black mt-7 text-center  mb-8">
         Marathon Page
       </h2>

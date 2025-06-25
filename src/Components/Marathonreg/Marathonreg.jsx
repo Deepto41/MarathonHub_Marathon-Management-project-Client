@@ -50,6 +50,7 @@ const Marathonreg = () => {
   };
   return (
     <div className="mt-4 mb-4">
+      <title>Regestration Marathons!|| MarathonHub</title>
       <form onSubmit={handleregestration}>
         <div className="bg-base-200 border max-w-lg mx-auto border-base-300 rounded-xl p-6 space-y-4">
           <h2 className="text-3xl font-bold text-center">Regestration Marathons!</h2>

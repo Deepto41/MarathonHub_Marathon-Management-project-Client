@@ -58,6 +58,7 @@ const [marathonStartDate, setMarathonStartDate] = useState(new Date());
 
   return (
     <div className="mx-auto max-w-lg mt-8 mb-8 px-4">
+      <title>Add Marathon || MarathonHub</title>
       <form onSubmit={handleaddmarathon}>
         <div className="bg-base-200 border border-base-300 rounded-xl p-6 space-y-4">
           <h2 className="text-3xl font-bold text-center">Add Marathons!</h2>

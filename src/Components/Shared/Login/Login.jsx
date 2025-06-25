@@ -5,6 +5,7 @@ import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import app from "../../Firebase/Firebase.init";
 import Swal from "sweetalert2";
 import { Authcontext } from "../../Context/Authcontext";
+import { Helmet } from "react-helmet";
 
 const Login = () => {
   const {logIn} = use(Authcontext);
@@ -74,7 +75,12 @@ const Login = () => {
   };
 
   return (
+
+    
     <div className="mx-auto max-w-sm mt-8 mb-6">
+     
+                <title>Login || MarathonHub</title>
+            
       <form onSubmit={handelLogin}>
         {/* Email field */}
         <div className="fieldset bg-base-200 border-base-300 rounded-box w-sm border p-6">
