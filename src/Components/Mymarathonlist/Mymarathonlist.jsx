@@ -12,6 +12,7 @@ const Mymarathonlist = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [marathonStartDate, setMarathonStartDate] = useState(new Date());
+  const [deletePost, setDeletePost] = useState(null);
 
   useEffect(() => {
     if (user?.email) {
@@ -26,6 +27,23 @@ const Mymarathonlist = () => {
       .then((res) => res.json())
       .then((data) => setMypost(data));
   };
+      const handledelete = (_id) => {
+      fetch(`http://localhost:3000/deletemymarathon/${_id}`, {
+        method: "DELETE",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.deletedCount) {
+            Swal.fire({
+              title: "Delete Successfully!",
+              icon: "success",
+              draggable: true,
+            });
+            loadApplications();
+            setDeletePost(null);
+          }
+        });
+    };
 
   const handleUpdate = (e) => {
     e.preventDefault();
@@ -35,13 +53,13 @@ const Mymarathonlist = () => {
       start_date: form.start_date.value,
       end_date: form.end_date.value,
       Marathon_Start: form.Marathon_Start.value,
-      location:form.location.value,
+      location: form.location.value,
       distance: form.distance.value,
-      description:form.description.value,
-      Image:form.Image.value
-
+      description: form.description.value,
+      Image: form.Image.value,
     };
 
+ 
     fetch(`http://localhost:3000/updatemarathon/${post._id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -104,9 +122,9 @@ const Mymarathonlist = () => {
                           Update
                         </button>
 
-                        <button
-                        
-                          className="btn btn-success mr-3"
+                          <button
+                          className="btn bg-red-600"
+                          onClick={() => setDeletePost(post)}
                         >
                           Delete
                         </button>
@@ -197,7 +215,6 @@ const Mymarathonlist = () => {
                                 defaultValue={post.distance}
                                 className="select w-full"
                                 name="distance"
-                              
                               >
                                 <option disabled value="">
                                   Select a distance
@@ -225,13 +242,12 @@ const Mymarathonlist = () => {
                                 name="Image"
                                 defaultValue={post.Image}
                                 className="input w-full"
-                            
                               />
                             </div>
 
                             <div className="modal-action">
                               <button type="submit" className="btn btn-success">
-                                Save
+                                Update
                               </button>
 
                               <button
@@ -249,6 +265,30 @@ const Mymarathonlist = () => {
                   </div>
                 </dialog>
               )}
+
+               {deletePost && (
+              <dialog id="delete_modal" className="modal modal-open">
+                <div className="modal-box">
+                  <h3 className="text-lg font-bold mb-4">
+                    Are you sure you want to delete this marathon?
+                  </h3>
+                  <p className="mb-4 text-red-600 font-semibold justify-center items-center text-center">
+                    {deletePost.title}
+                  </p>
+                  <div className="modal-action">
+                    <button
+                      className="btn btn-error"
+                      onClick={() => handledelete(deletePost._id)}
+                    >
+                      Yes, Delete
+                    </button>
+                    <button className="btn" onClick={() => setDeletePost(null)}>
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </dialog>
+            )}
             </div>
           </div>
         </div>
