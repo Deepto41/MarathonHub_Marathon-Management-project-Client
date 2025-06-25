@@ -1,7 +1,7 @@
 import React, { use, useEffect, useState } from "react";
 import { CiLight } from "react-icons/ci";
 import { MdDarkMode } from "react-icons/md";
-import { Link, Navigate, NavLink, useNavigate } from "react-router";
+import { Link, Navigate, NavLink, useLocation, useNavigate } from "react-router";
 import "./Navbar.css";
 import { Authcontext } from "../Context/Authcontext";
 import Swal from "sweetalert2";
@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 const Navbar = () => {
   const { user, logOut } = use(Authcontext);
   const navigate =useNavigate();
+
 
   const [theme, setTheme] = useState("light");
   useEffect(() => {

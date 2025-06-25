@@ -14,12 +14,13 @@ const Marathonreg = () => {
 
     const newData = Object.fromEntries(formdata.entries());
     console.log(newData);
-    
+
     const dataSendToDb = {
       ...newData,
+      marathonId: user._id,
     };
 
-   fetch("http://localhost:3000/regestrationCollection", {
+    fetch("http://localhost:3000/regestrationCollection", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -45,18 +46,13 @@ const Marathonreg = () => {
         }
 
         form.reset();
-        
       });
-
-
-
-
   };
   return (
     <div className="mt-4 mb-4">
       <form onSubmit={handleregestration}>
         <div className="bg-base-200 border max-w-lg mx-auto border-base-300 rounded-xl p-6 space-y-4">
-          <h2 className="text-3xl font-bold text-center">Add Marathons!</h2>
+          <h2 className="text-3xl font-bold text-center">Regestration Marathons!</h2>
 
           <div>
             <label className="label">Email</label>
