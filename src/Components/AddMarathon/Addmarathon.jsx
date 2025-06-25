@@ -112,6 +112,7 @@ const [marathonStartDate, setMarathonStartDate] = useState(new Date());
               className="input lg:w-108 md:w-108 w-60 "
             />
           </div>
+          
           <div>
             <label className="label">Location</label>
             <input

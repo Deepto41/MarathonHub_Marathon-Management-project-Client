@@ -1,14 +1,17 @@
 import React, { use, useEffect, useState } from "react";
 import { Authcontext } from "../Context/Authcontext";
-import { useNavigate } from "react-router";
+import Swal from "sweetalert2";
+import DatePicker from "react-datepicker";
 
 const Mymarathonlist = () => {
   const { user } = use(Authcontext);
   const [showModal, setShowModal] = useState(false);
-  const [selectedPost, setSelectedPost] = useState(null);
+  const [post, setPost] = useState(null);
   console.log(user);
   const [mypost, setMypost] = useState([]);
-  const navigate = useNavigate();
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [marathonStartDate, setMarathonStartDate] = useState(new Date());
 
   useEffect(() => {
     if (user?.email) {
@@ -17,6 +20,47 @@ const Mymarathonlist = () => {
         .then((data) => setMypost(data));
     }
   }, [user]);
+
+  const loadApplications = () => {
+    fetch(`http://localhost:3000/mylisting?email=${user?.email}`)
+      .then((res) => res.json())
+      .then((data) => setMypost(data));
+  };
+
+  const handleUpdate = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const update = {
+      title: form.title.value,
+      start_date: form.start_date.value,
+      end_date: form.end_date.value,
+      Marathon_Start: form.Marathon_Start.value,
+      location:form.location.value,
+      distance: form.distance.value,
+      description:form.description.value,
+      Image:form.Image.value
+
+    };
+
+    fetch(`http://localhost:3000/updatemarathon/${post._id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(update),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.modifiedCount) {
+          Swal.fire({
+            title: "Updated Successfully!",
+            icon: "success",
+            draggable: true,
+          });
+          setShowModal(false);
+          setPost(null);
+          loadApplications();
+        }
+      });
+  };
 
   return (
     <div className="w-11/12 mx-auto">
@@ -51,107 +95,160 @@ const Mymarathonlist = () => {
                       <td>
                         {" "}
                         <button
-                          onClick={() => navigate()}
                           className="btn btn-success mr-3"
+                          onClick={() => {
+                            setPost(post);
+                            setShowModal(true);
+                          }}
                         >
                           Update
                         </button>
+
                         <button
-                          onClick={() => {
-                            setSelectedPost(post);
-                            setShowModal(true);
-                          }}
+                        
                           className="btn btn-success mr-3"
                         >
-                          Update
+                          Delete
                         </button>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-              {showModal && selectedPost && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-    <div className="bg-white rounded-lg p-6 w-96">
-      <h2 className="text-xl font-bold mb-4">Edit Marathon</h2>
-      <form
-        onSubmit={async (e) => {
-          e.preventDefault();
-          const form = e.target;
-          const updatedData = {
-            title: form.title.value,
-            location: form.location.value,
-            name: form.name.value,
-          };
 
-          try {
-            const res = await fetch(`http://localhost:3000/updatemarathon/${selectedPost._id}`, {
-              method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(updatedData),
-            });
+              {showModal && post && (
+                <dialog id="update_modal" className="modal modal-open">
+                  <div className="modal-box">
+                    <div className="mt-4 mb-4">
+                      <form onSubmit={handleUpdate}>
+                        <div className="form-control mb-2">
+                          <div className="bg-base-200 border max-w-lg mx-auto border-base-300 rounded-xl p-6 space-y-4">
+                            <h2 className="text-3xl font-bold text-center">
+                              Update Marathons!
+                            </h2>
+                            <div>
+                              <label className="label">Title</label>
+                              <input
+                                type="text"
+                                name="title"
+                                defaultValue={post.title}
+                                className="input w-full"
+                              />
+                            </div>
 
-            const result = await res.json();
-            if (res.ok) {
-              // Update local state
-              setMypost((prev) =>
-                prev.map((item) => (item._id === selectedPost._id ? result : item))
-              );
-              setShowModal(false);
-            } else {
-              alert("Update failed");
-            }
-          } catch (err) {
-            console.error(err);
-            alert("Server error");
-          }
-        }}
-      >
-        <div className="mb-3">
-          <label className="block text-sm font-medium">Title</label>
-          <input
-            name="title"
-            defaultValue={selectedPost.title}
-            className="w-full border px-2 py-1 rounded"
-          />
-        </div>
-        <div className="mb-3">
-          <label className="block text-sm font-medium">Location</label>
-          <input
-            name="location"
-            defaultValue={selectedPost.location}
-            className="w-full border px-2 py-1 rounded"
-          />
-        </div>
-        <div className="mb-3">
-          <label className="block text-sm font-medium">Name</label>
-          <input
-            name="name"
-            defaultValue={selectedPost.name}
-            className="w-full border px-2 py-1 rounded"
-          />
-        </div>
-        <div className="flex justify-end gap-2">
-          <button
-            type="button"
-            onClick={() => setShowModal(false)}
-            className="bg-gray-300 px-4 py-1 rounded"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            className="bg-green-500 text-white px-4 py-1 rounded"
-          >
-            Save
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-)}
+                            <div>
+                              <label className="label flex flex-row ">
+                                Start Regestration Date
+                              </label>
+                              <DatePicker
+                                selected={startDate}
+                                onChange={(date) => setStartDate(date)}
+                                dateFormat="dd/MM/yyyy"
+                                defaultValue={post.startDate}
+                                type="date"
+                                name="start_date"
+                                className="input lg:w-99 md:w-104 w-73  "
+                              />
+                            </div>
+
+                            <div>
+                              <label className="label flex flex-row ">
+                                End Regestration Date
+                              </label>
+                              <DatePicker
+                                selected={endDate}
+                                onChange={(date) => setEndDate(date)}
+                                dateFormat="dd/MM/yyyy"
+                                defaultValue={post.endDate}
+                                type="date"
+                                name="end_date"
+                                className="input lg:w-99 md:w-104 w-73  "
+                              />
+                            </div>
+
+                            <div>
+                              <label className="label">
+                                Marathon Start Date
+                              </label>
+                              <DatePicker
+                                selected={marathonStartDate}
+                                onChange={(date) => setMarathonStartDate(date)}
+                                dateFormat="dd/MM/yyyy"
+                                defaultValue={post.marathonStartDate}
+                                type="date"
+                                name="Marathon_Start"
+                                className="input lg:w-99 md:w-104 w-73 "
+                              />
+                            </div>
+
+                            <div>
+                              <label className="label">Location</label>
+                              <input
+                                type="text"
+                                name="location"
+                                className="input w-full"
+                                defaultValue={post.location}
+                              />
+                            </div>
+
+                            <div>
+                              <label className="label">Running Distance</label>
+                              <select
+                                defaultValue={post.distance}
+                                className="select w-full"
+                                name="distance"
+                              
+                              >
+                                <option disabled value="">
+                                  Select a distance
+                                </option>
+                                <option>25K</option>
+                                <option>30K</option>
+                                <option>3K</option>
+                              </select>
+                            </div>
+
+                            <div>
+                              <label className="label">Description</label>
+                              <textarea
+                                name="description"
+                                rows="4"
+                                cols="50"
+                                className="input w-full"
+                                defaultValue={post.description}
+                              ></textarea>
+                            </div>
+                            <div>
+                              <label className="label">Marathon Image</label>
+                              <input
+                                type="url"
+                                name="Image"
+                                defaultValue={post.Image}
+                                className="input w-full"
+                            
+                              />
+                            </div>
+
+                            <div className="modal-action">
+                              <button type="submit" className="btn btn-success">
+                                Save
+                              </button>
+
+                              <button
+                                type="button"
+                                className="btn"
+                                onClick={() => setShowModal(false)}
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </dialog>
+              )}
             </div>
           </div>
         </div>
