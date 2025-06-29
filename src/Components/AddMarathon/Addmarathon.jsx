@@ -5,11 +5,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import Swal from "sweetalert2";
 
 const Addmarathon = () => {
-const [startDate, setStartDate] = useState(new Date());
-const [endDate, setEndDate] = useState(new Date());
-const [marathonStartDate, setMarathonStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [marathonStartDate, setMarathonStartDate] = useState(new Date());
 
   const { user } = use(Authcontext);
+ 
 
   const handleaddmarathon = (e) => {
     e.preventDefault();
@@ -24,13 +25,15 @@ const [marathonStartDate, setMarathonStartDate] = useState(new Date());
       name: user?.displayName,
       email: user?.email,
       createdAt: new Date(),
+    
     };
     console.log(dataSendToDb);
 
-    fetch("http://localhost:3000/marathons", {
+    fetch("https://marathon-hub-project-server.vercel.app/marathons", {
       method: "POST",
       headers: {
         "content-type": "application/json",
+       
       },
       body: JSON.stringify(dataSendToDb),
     })
@@ -59,6 +62,7 @@ const [marathonStartDate, setMarathonStartDate] = useState(new Date());
   return (
     <div className="mx-auto max-w-lg mt-8 mb-8 px-4">
       <title>Add Marathon || MarathonHub</title>
+
       <form onSubmit={handleaddmarathon}>
         <div className="bg-base-200 border border-base-300 rounded-xl p-6 space-y-4">
           <h2 className="text-3xl font-bold text-center">Add Marathons!</h2>
@@ -113,7 +117,7 @@ const [marathonStartDate, setMarathonStartDate] = useState(new Date());
               className="input lg:w-108 md:w-108 w-60 "
             />
           </div>
-          
+
           <div>
             <label className="label">Location</label>
             <input

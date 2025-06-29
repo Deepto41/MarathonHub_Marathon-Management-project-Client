@@ -1,7 +1,7 @@
 import React, { use, useEffect, useState } from "react";
 import { CiLight } from "react-icons/ci";
 import { MdDarkMode } from "react-icons/md";
-import { Link, Navigate, NavLink, useLocation, useNavigate } from "react-router";
+import { Link, Navigate, NavLink,  useNavigate } from "react-router";
 import "./Navbar.css";
 import { Authcontext } from "../Context/Authcontext";
 import Swal from "sweetalert2";
@@ -45,19 +45,27 @@ const Navbar = () => {
       <li className="font-medium text-md  mr-2">
         <NavLink to="/marathons">Marathons</NavLink>
       </li>
-      <li className="font-medium text-md  mr-2">
+     
+    
+
+    
+    
+      
+      {
+        user &&  <li className="font-medium text-md  mr-2">
         <NavLink to="/addmarathon">Add Marathons</NavLink>
       </li>
-      <li className="font-medium text-md  mr-2">
+      }
+      
+        {user &&   <li className="font-medium text-md  mr-2">
         <NavLink to="/mymarathonlist">My Marathons List</NavLink>
-      </li>
+      </li>}
 
-      {user && (
+        {user && (
         <li className="font-medium text-md  mr-2">
           <NavLink to="/dashboard">Dashboard</NavLink>
         </li>
       )}
-
     </>
   );
 

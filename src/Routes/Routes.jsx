@@ -12,8 +12,10 @@ import Details from "../Details/Details";
 import Marathonreg from "../Components/Marathonreg/Marathonreg";
 import Mymarathonlist from "../Components/Mymarathonlist/Mymarathonlist";
 import Myapply from "../Components/Myapply/Myapply";
+import { Authcontext } from "../Components/Context/Authcontext";
 
 export const router = createBrowserRouter([
+
   {
     path: "/",
     Component: Root,
@@ -21,7 +23,7 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        loader: () => fetch("http://localhost:3000/marathonlimit"),
+        loader: () => fetch("https://marathon-hub-project-server.vercel.app/marathonlimit"),
         Component: Home,
       },
 
@@ -29,13 +31,14 @@ export const router = createBrowserRouter([
       {
         path: "/details/:_id",
         loader: ({ params }) =>
-          fetch(`http://localhost:3000/allmarathon/${params._id}`),
+          fetch(`https://marathon-hub-project-server.vercel.app/allmarathon/${params._id}`),
         Component: Details,
       },
       { path: "regester", Component: Regester },
+
       {
         path: "marathons",
-        loader: () => fetch("http://localhost:3000/allmarathon"),
+        loader: () => fetch("https://marathon-hub-project-server.vercel.app/allmarathon"),
         element: (
           <Privateroute>
             <Marathons></Marathons>
@@ -44,7 +47,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/marathonreg/:_id",
-        loader:({params})=> fetch(`http://localhost:3000/allmarathon/${params._id}`),
+        loader:({params})=> fetch(`https://marathon-hub-project-server.vercel.app/allmarathon/${params._id}`),
         element: (
           <Privateroute>
             <Marathonreg></Marathonreg>

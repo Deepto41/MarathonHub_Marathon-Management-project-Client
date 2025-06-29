@@ -5,7 +5,7 @@ import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import app from "../../Firebase/Firebase.init";
 import Swal from "sweetalert2";
 import { Authcontext } from "../../Context/Authcontext";
-import { Helmet } from "react-helmet";
+
 
 const Login = () => {
   const {logIn} = use(Authcontext);

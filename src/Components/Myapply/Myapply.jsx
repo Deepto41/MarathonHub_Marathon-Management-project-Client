@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from "react";
+import React, {  use, useEffect, useState } from "react";
 import { Authcontext } from "../Context/Authcontext";
 import Swal from "sweetalert2";
 
@@ -10,10 +10,14 @@ const Myapply = () => {
   const [searchText, setSearchText] = useState("");
   const [post, setPost] = useState(null);
   const [deletePost, setDeletePost] = useState(null);
-
+  const token =user.accessToken;
   useEffect(() => {
     if (user?.email) {
-      fetch(`http://localhost:3000/myapply?email=${user?.email}`)
+      fetch(`https://marathon-hub-project-server.vercel.app/myapply?email=${user?.email}`,{
+        headers:{
+          authorization:`Bearer ${token}`
+        }
+      })
         .then((res) => res.json())
         .then((data) => setMypost(data));
     }
@@ -24,13 +28,17 @@ const Myapply = () => {
   );
 
   const loadApplications = () => {
-    fetch(`http://localhost:3000/myapply?email=${user?.email}`)
+    fetch(`https://marathon-hub-project-server.vercel.app/myapply?email=${user?.email}`,{
+      headers: {
+      authorization: `Bearer ${token}`,
+    },
+    })
       .then((res) => res.json())
       .then((data) => setMypost(data));
   };
 
   const handledelete = (_id) => {
-    fetch(`http://localhost:3000/deletemarathonlist/${_id}`, {
+    fetch(`https://marathon-hub-project-server.vercel.app/deletemarathonlist/${_id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())
@@ -57,7 +65,7 @@ const Myapply = () => {
       info: form.info.value,
     };
 
-    fetch(`http://localhost:3000/updateapplylist/${post._id}`, {
+    fetch(`https://marathon-hub-project-server.vercel.app/updateapplylist/${post._id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(update),

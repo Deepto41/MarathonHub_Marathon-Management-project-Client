@@ -14,7 +14,7 @@
 //           title: form.title.value,
 //           location: form.location.value,
 //         };
-//         fetch(`http://localhost:3000/marathons/${selectedMarathon._id}`, {
+//         fetch(`https://marathon-hub-project-server.vercel.app/marathons/${selectedMarathon._id}`, {
 //           method: "PUT",
 //           headers: {
 //             "Content-Type": "application/json"

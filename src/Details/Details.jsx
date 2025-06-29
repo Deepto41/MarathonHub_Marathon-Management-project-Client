@@ -5,34 +5,34 @@ import { CountdownCircleTimer } from "react-countdown-circle-timer";
 const Details = () => {
   const navigate = useNavigate();
   const data = useLoaderData();
-  console.log(data);
+
 
   const today = new Date();
 
-  const startDate = new Date(Date.parse(data.start_date));
-  const endDate = new Date(Date.parse(data.End_date));
-  const marathonStart = data.Marathon_Start;
+  const startDate = new Date(data.start_date);
+  const endDate = new Date(data.End_date);
+  const marathonStart = new Date(data.Marathon_Start);
+    const isRegistrationOpen = today >= startDate && today <= endDate;
 
-  const isStartValid = !isNaN(startDate);
-  const isEndValid = !isNaN(endDate);
-  const isMarathonStartValid = !isNaN(marathonStart);
-  const isValidDates = isStartValid && isEndValid;
 
-  const isRegistrationOpen = today <= endDate;
-  const totalDuration = isValidDates
-    ? Math.max(Math.floor((endDate - startDate) / 1000), 0)
-    : 0;
-  const initialRemainingTime = isValidDates
-    ? Math.max(Math.floor((endDate - today) / 1000), 0)
-    : 0;
+ const registrationEndTime = new Date(data.End_date).getTime(); 
+const now = new Date().getTime(); 
 
- const formatTime = (seconds) => {
-    const days = Math.floor(seconds / (3600 * 24));
-    const hours = Math.floor((seconds % (3600 * 24)) / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
-    return `${days}d ${hours}h ${minutes}m ${secs}s`;
-  };
+const totalDuration = Math.floor((registrationEndTime - startDate.getTime()) / 1000); 
+
+const initialRemainingTime = Math.max(Math.floor((registrationEndTime - now) / 1000), 0);
+
+const isValidDates = !isNaN(registrationEndTime) && !isNaN(startDate.getTime());
+
+const formatTime = (seconds) => {
+  const days = Math.floor(seconds / (60 * 60 * 24));
+  const hours = Math.floor((seconds % (60 * 60 * 24)) / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+
+  return `${days}d ${hours}h ${minutes}m ${secs}s`;
+};
+  
 
   return (
     <div className="w-11/12 mx-auto">
@@ -52,35 +52,10 @@ const Details = () => {
               </figure>
               <div className="card-body justify-center items-center ">
                 <h2 className="card-title text-lg  ">Title:{data.title}</h2>
-
-                {/* <div className="card-actions flex flex-col justify-center items-center font-normal mt-2">
-                  <p>
-                    📅Regestration Start Date:
-                    {startDate.toLocaleDateString()}
-                  </p>
-                  <p>
-                    📅Regestration End Date:
-                    {endDate.toLocaleDateString()}
-                  </p>
-                  <p>📅 Marathon Start:{marathonStart}</p>
-                  <p> 📍 Location: {data.location} </p> */}
-
-     {isStartValid ? (
-                  <p>📅 Registration Start Date: {startDate.toLocaleDateString()}</p>
-                ) : (
-                  <p className="text-red-200">⚠️ Invalid or missing start date</p>
-                )}
-                     {isEndValid ? (
-                  <p>📅 Registration End Date: {endDate.toLocaleDateString()}</p>
-                ) : (
-                  <p className="text-red-200">⚠️ Invalid or missing end date</p>
-                )}
-                      {isMarathonStartValid ? (
-                  <p>📅 Marathon Start: {marathonStart.toLocaleString()}</p>
-                ) : (
-                  <p className="text-red-200">⚠️ Invalid or missing marathon start</p>
-                )}
-
+                 
+                 <p>Start Date:{data.start_date}</p>
+                 <p>End Date:{data.End_date}</p>
+                 <p>Marathon Start:{data.Marathon_Start}</p>
                 <p>📍 Location: {data.location}</p>
 
 
@@ -91,19 +66,20 @@ const Details = () => {
                           title: data.title,
                           Marathon_Start: startDate,
                           Marathon_End: endDate,
-                         Marathon_start: marathonStart,
+                           marathonStart: marathonStart,
                           email: data.email,
+                          
                         },
                       })
                     }
                     disabled={!isRegistrationOpen}
-                    className={`btn text-white rounded-xl px-4 py-1 ${
-                      isRegistrationOpen
-                        ? "bg-[#020079]"
-                        : "bg-gray-200 cursor-not-allowed"
-                    }`}
-                  >
-                    {isRegistrationOpen ? "Register Now" : "Registration Close"}
+                className={`btn text-white rounded-xl px-4 py-2 mt-4 ${
+                  isRegistrationOpen
+                    ? "bg-[#020079] hover:bg-blue-900"
+                    : "bg-gray-400 cursor-not-allowed"
+                }`}
+              >
+                {isRegistrationOpen ? "Register Now" : "Registration Closed"}
                   </button>
 
                   {isValidDates && initialRemainingTime > 0 && (

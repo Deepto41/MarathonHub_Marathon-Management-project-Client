@@ -13,37 +13,46 @@ const Mymarathonlist = () => {
   const [endDate, setEndDate] = useState(new Date());
   const [marathonStartDate, setMarathonStartDate] = useState(new Date());
   const [deletePost, setDeletePost] = useState(null);
+   const token =user.accessToken;
 
   useEffect(() => {
     if (user?.email) {
-      fetch(`http://localhost:3000/mylisting?email=${user?.email}`)
+      fetch(`https://marathon-hub-project-server.vercel.app/mylisting?email=${user?.email}`,{
+        headers:{
+          authorization:`Bearer ${token}`
+        }
+      })
         .then((res) => res.json())
         .then((data) => setMypost(data));
     }
   }, [user]);
 
   const loadApplications = () => {
-    fetch(`http://localhost:3000/mylisting?email=${user?.email}`)
+    fetch(`https://marathon-hub-project-server.vercel.app/mylisting?email=${user?.email}`,{
+        headers:{
+          authorization:`Bearer ${token}`
+        }
+    })
       .then((res) => res.json())
       .then((data) => setMypost(data));
   };
-      const handledelete = (_id) => {
-      fetch(`http://localhost:3000/deletemymarathon/${_id}`, {
-        method: "DELETE",
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.deletedCount) {
-            Swal.fire({
-              title: "Delete Successfully!",
-              icon: "success",
-              draggable: true,
-            });
-            loadApplications();
-            setDeletePost(null);
-          }
-        });
-    };
+  const handledelete = (_id) => {
+    fetch(`https://marathon-hub-project-server.vercel.app/deletemymarathon/${_id}`, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.deletedCount) {
+          Swal.fire({
+            title: "Delete Successfully!",
+            icon: "success",
+            draggable: true,
+          });
+          loadApplications();
+          setDeletePost(null);
+        }
+      });
+  };
 
   const handleUpdate = (e) => {
     e.preventDefault();
@@ -59,8 +68,7 @@ const Mymarathonlist = () => {
       Image: form.Image.value,
     };
 
- 
-    fetch(`http://localhost:3000/updatemarathon/${post._id}`, {
+    fetch(`https://marathon-hub-project-server.vercel.app/updatemarathon/${post._id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(update),
@@ -82,7 +90,7 @@ const Mymarathonlist = () => {
 
   return (
     <div className="w-11/12 mx-auto">
-      <title>  My Marathon List|| MarathonHub</title>
+      <title> My Marathon List|| MarathonHub</title>
       <h2 className="font-bold text-3xl mt-6 mb-8 text-center">
         My Marathon List
       </h2>
@@ -122,8 +130,7 @@ const Mymarathonlist = () => {
                         >
                           Update
                         </button>
-
-                          <button
+                        <button
                           className="btn bg-red-600"
                           onClick={() => setDeletePost(post)}
                         >
@@ -267,29 +274,32 @@ const Mymarathonlist = () => {
                 </dialog>
               )}
 
-               {deletePost && (
-              <dialog id="delete_modal" className="modal modal-open">
-                <div className="modal-box">
-                  <h3 className="text-lg font-bold mb-4">
-                    Are you sure you want to delete this marathon?
-                  </h3>
-                  <p className="mb-4 text-red-600 font-semibold justify-center items-center text-center">
-                    {deletePost.title}
-                  </p>
-                  <div className="modal-action">
-                    <button
-                      className="btn btn-error"
-                      onClick={() => handledelete(deletePost._id)}
-                    >
-                      Yes, Delete
-                    </button>
-                    <button className="btn" onClick={() => setDeletePost(null)}>
-                      Cancel
-                    </button>
+              {deletePost && (
+                <dialog id="delete_modal" className="modal modal-open">
+                  <div className="modal-box">
+                    <h3 className="text-lg font-bold mb-4">
+                      Are you sure you want to delete this marathon?
+                    </h3>
+                    <p className="mb-4 text-red-600 font-semibold justify-center items-center text-center">
+                      {deletePost.title}
+                    </p>
+                    <div className="modal-action">
+                      <button
+                        className="btn btn-error"
+                        onClick={() => handledelete(deletePost._id)}
+                      >
+                        Yes, Delete
+                      </button>
+                      <button
+                        className="btn"
+                        onClick={() => setDeletePost(null)}
+                      >
+                        Cancel
+                      </button>
+                    </div>
                   </div>
-                </div>
-              </dialog>
-            )}
+                </dialog>
+              )}
             </div>
           </div>
         </div>

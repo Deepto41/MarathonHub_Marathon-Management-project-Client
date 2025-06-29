@@ -20,7 +20,7 @@ const Marathonreg = () => {
       marathonId: user._id,
     };
 
-    fetch("http://localhost:3000/regestrationCollection", {
+    fetch("https://marathon-hub-project-server.vercel.app/regestrationCollection", {
       method: "POST",
       headers: {
         "content-type": "application/json",
