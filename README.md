@@ -76,7 +76,5 @@ http://localhost:3000
 View Live MarathonHub
 
 📚 Additional Resources
-Project documentation (if any)
-
-API endpoints reference (if applicable)
+Live Project Link : https://glowing-queijadas-779f5d.netlify.app/
 
