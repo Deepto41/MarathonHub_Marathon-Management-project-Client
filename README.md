@@ -4,11 +4,6 @@
 
 ---
 
-## 📸 Screenshot
-![MarathonHub Screenshot](https://i.ibb.co/JjwnSZTz/1756830632692.jpg)
-
----
-
 ## 🛠️ Technologies Used
 - React.js
 - Express.js
